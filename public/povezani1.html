@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Galaksija</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #chatContainer {
+            width: 800px;
+            height: 600px;
+            margin: auto;
+            border: 2px solid white;
+            background-color: black;
+            display: flex;
+            position: relative;
+            flex-direction: column; /* Make it column to separate input and messages */
+        }
+
+        #toolbar {
+            width: 100%;
+            height: 50px;
+            background-color: black;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-bottom: 2px solid white;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .toolbarBtn {
+            padding: 10px 20px;
+            background-color: black;
+            border: 2px solid white;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .toolbarBtn:hover {
+            background-color: #666;
+        }
+
+        #messageInput {
+            padding: 10px;
+            border-top: 2px solid white;
+            display: flex;
+        }
+
+        #messageInput textarea {
+            flex-grow: 1;
+            padding: 5px;
+            border-radius: 5px;
+            border: 2px solid white;
+            resize: none;
+            font-size: 16px;
+            background-color: black;
+            color: white;
+        }
+
+        #messageArea {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto; /* Allow scrolling for messages */
+            display: flex;
+            flex-direction: column; /* Stack messages vertically */
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+
+        #guestList {
+            position: absolute;
+            right: 0;
+            top: 60px;
+            width: 200px;
+            height: calc(100% - 130px);
+            border-left: 2px solid white;
+            background-color: black;
+            color: white;
+            border-bottom: 2px solid white;
+            overflow-y: auto; /* Allow scrolling for guest list */
+        }
+
+        .guest {
+            padding: 5px;
+            border-bottom: 1px solid white;
+            cursor: pointer;
+        }
+
+        #colorPickerContainer {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid black;
+            padding: 10px;
+            z-index: 10;
+        }
+
+        #colorPickerContainer input[type="color"] {
+            width: 100%;
+        }
+
+        #colorPickerContainer button {
+            margin-top: 5px;
+            width: 100%;
+            padding: 5px;
+        }
+
+        #djNickname {
+            font-weight: bold;
+            color: #FFD700;
+            padding: 5px;
+            border-bottom: 1px solid white;
+        }
+
+        .authForm {
+            display: none;
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border: 2px solid white;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+
+        .authForm input {
+            width: 100%;
+            padding: 5px;
+            margin: 5px 0;
+            border: 2px solid white;
+            border-radius: 5px;
+            background-color: black;
+            color: white;
+        }
+
+        .virtualGuestForm {
+            display: none;
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border: 2px solid white;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="chatContainer">
+        <div id="toolbar">
+            <button class="toolbarBtn" id="boldBtn">Bold</button>
+            <button class="toolbarBtn" id="italicBtn">Italic</button>
+            <button class="toolbarBtn" id="colorBtn">Color</button>
+            <button class="toolbarBtn" onclick="showLoginForm()">Login/Register</button>
+        </div>
+       
+        <div id="messageArea"></div> <!-- Message area for displaying messages -->
+        
+        <div id="messageInput">
+            <textarea id="chatInput" rows="2" placeholder="Type your message..."></textarea>
+        </div>
+        
+        <div id="guestList">
+            <div id="djNickname">Radio Galaksija</div>
+            <!-- Dynamic guest list will appear below -->
+        </div>
+
+        <div id="colorPickerContainer">
+            <input type="color" id="colorPicker">
+            <button id="applyColorBtn">OK</button>
+        </div>
+
+        <div id="authForm" class="authForm">
+            <h1>Register / Login</h1>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="registerOrLogin()">Submit</button>
+            <button onclick="hideAuthForm()">Cancel</button>
+        </div>
+
+        <div id="virtualGuestForm" class="virtualGuestForm">
+            <h2>Add Virtual Guest</h2>
+            <input type="text" id="virtualGuestName" placeholder="Virtual Guest Nickname">
+            <label for="virtualGuestBold">Bold:</label>
+            <input type="checkbox" id="virtualGuestBold">
+            <label for="virtualGuestItalic">Italic:</label>
+            <input type="checkbox" id="virtualGuestItalic">
+            <label for="virtualGuestColor">Choose Color:</label>
+            <input type="color" id="virtualGuestColor" value="#FFFFFF">
+            <button onclick="addVirtualGuest()">Add Guest</button>
+            <button onclick="hideVirtualGuestForm()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        let isBold = false;
+        let isItalic = false;
+        let textColor = '#FFFFFF'; // Default color
+        let virtualGuests = []; // Store virtual guests
+        let isDJLoggedIn = false; // Track if DJ is logged in
+        let currentNickname = "Radio Galaksija"; // Current active nickname
+        let currentTextColor = '#FFD700'; // Default DJ color
+
+        document.getElementById('boldBtn').addEventListener('click', function() {
+            isBold = !isBold;
+            updateTextStyle();
+        });
+
+        document.getElementById('italicBtn').addEventListener('click', function() {
+            isItalic = !isItalic;
+            updateTextStyle();
+        });
+
+        document.getElementById('colorBtn').addEventListener('click', function() {
+            let colorPickerContainer = document.getElementById('colorPickerContainer');
+            colorPickerContainer.style.display = 'block';
+        });
+
+        document.getElementById('applyColorBtn').addEventListener('click', function() {
+            let colorPicker = document.getElementById('colorPicker');
+            textColor = colorPicker.value;
+            currentTextColor = textColor; // Update DJ's current text color
+            updateTextStyle();
+            document.getElementById('colorPickerContainer').style.display = 'none';
+        });
+
+        function updateTextStyle() {
+            let inputField = document.getElementById('chatInput');
+            inputField.style.fontWeight = isBold ? 'bold' : 'normal';
+            inputField.style.fontStyle = isItalic ? 'italic' : 'normal';
+            inputField.style.color = currentTextColor; // Update to current text color
+            document.getElementById('djNickname').style.color = currentTextColor; // Update DJ nickname color
+        }
+
+        document.getElementById('chatInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+function sendMessage() {
+    let messageArea = document.getElementById('messageArea');
+    let chatInput = document.getElementById('chatInput');
+    let message = chatInput.value.trim();
+
+    if (message !== '') {
+        let newMessage = document.createElement('div');
+        newMessage.className = 'message';
+        newMessage.style.fontWeight = isBold ? 'bold' : 'normal';
+        newMessage.style.fontStyle = isItalic ? 'italic' : 'normal';
+        newMessage.style.color = currentTextColor; // Use selected text color
+
+        newMessage.textContent = `${currentNickname}: ${message}`;
+        
+        // Dodaj novu poruku na vrh messageArea
+        messageArea.insertBefore(newMessage, messageArea.firstChild);
+        
+        // Podesi skrol na vrh
+        messageArea.scrollTop = 0;
+        
+        // Očisti chat input nakon slanja poruke
+        chatInput.value = '';
+    }
+}
+
+
+        function showLoginForm() {
+            document.getElementById('authForm').style.display = 'block';
+        }
+
+        function hideAuthForm() {
+            document.getElementById('authForm').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function registerOrLogin() {
+            // Here you would typically handle login or registration logic
+            alert('Login/Register functionality is not yet implemented.');
+            hideAuthForm();
+        }
+        function addVirtualGuest() {
+            let guestName = document.getElementById('virtualGuestName').value.trim();
+            let isGuestBold = document.getElementById('virtualGuestBold').checked;
+            let isGuestItalic = document.getElementById('virtualGuestItalic').checked;
+            let guestColor = document.getElementById('virtualGuestColor').value;
+
+            if (guestName !== '') {
+                virtualGuests.push({ name: guestName, isBold: isGuestBold, isItalic: isGuestItalic, color: guestColor });
+
+                let guestList = document.getElementById('guestList');
+                let guestItem = document.createElement('div');
+                guestItem.className = 'guest';
+                guestItem.textContent = guestName;
+                guestItem.style.fontWeight = isGuestBold ? 'bold' : 'normal';
+                guestItem.style.fontStyle = isGuestItalic ? 'italic' : 'normal';
+                guestItem.style.color = guestColor;
+
+                guestList.appendChild(guestItem);
+                document.getElementById('virtualGuestName').value = '';
+                hideVirtualGuestForm();
+            } else {
+                alert('Please enter a virtual guest name.');
+            }
+        }
+
+        function showVirtualGuestForm() {
+            document.getElementById('virtualGuestForm').style.display = 'block';
+        }
+
+        function hideVirtualGuestForm() {
+            document.getElementById('virtualGuestForm').style.display = 'none';
+            document.getElementById('virtualGuestName').value = '';
+            document.getElementById('virtualGuestBold').checked = false;
+            document.getElementById('virtualGuestItalic').checked = false;
+            document.getElementById('virtualGuestColor').value = '#FFFFFF';
+        }
+
+    </script>
+</body>
+</html>

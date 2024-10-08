@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Galaksija</title>
+    <link rel="stylesheet" href="/styles.css">  <!-- Putanja do CSS stilova -->
+</head>
+<body>
+    <h1>RADIO GALAKSIJA!</h1>
+    <a href="povezani1.html">Idite na chat</a>
+
+    <div id="chat-container"></div>
+    <input type="text" id="message-input" placeholder="Unesite poruku...">
+    <button id="send-message">Pošaljite</button>
+
+    <div id="controls">
+        <button id="start-stream">Počni strim</button>
+        <button id="stop-stream">Završi strim</button>
+    </div>
+    
+    <!-- Skripte idu ovde -->
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="/chat.js"></script>
+</body>
+</html>

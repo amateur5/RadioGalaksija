@@ -1,0 +1,34 @@
+body {
+    background-color: #282c34; /* Tamna pozadina */
+    color: #ffffff; /* Bela boja teksta */
+    font-family: Arial, sans-serif; /* Font koji se koristi */
+    text-align: center; /* Centriran tekst */
+}
+
+h1 {
+    margin-top: 50px; /* Razmak iznad naslova */
+    font-size: 2.5em; /* Veličina fonta naslova */
+}
+
+#controls {
+    margin: 20px; /* Razmak oko kontrola */
+}
+
+button {
+    background-color: #007BFF; /* Plava pozadina dugmadi */
+    color: white; /* Bela boja teksta dugmadi */
+    border: none; /* Bez ivica */
+    padding: 10px 20px; /* Unutrašnji razmak */
+    font-size: 1em; /* Veličina fonta dugmadi */
+    border-radius: 5px; /* Zaobljeni uglovi */
+    cursor: pointer; /* Kursor postavljen na ruku */
+    transition: background-color 0.3s; /* Efekat prelaska */
+}
+
+button:hover {
+    background-color: #0056b3; /* Tamnija plava kada se pređe mišem */
+}
+
+button:active {
+    background-color: #004085; /* Još tamnija plava kada je dugme pritisnuto */
+}
