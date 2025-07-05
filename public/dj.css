@@ -31,7 +31,7 @@ background: linear-gradient(45deg, #ff6347, #ffffff, #ff1493, #40e0d0); /* Crven
     top: 50%;
     transform: translate(-50%, -50%);
     width: 400px;
-    height: 600px;
+    height: 350px;
     overflow: hidden;
     background-color: black; /* Potpuno crna pozadina */
     border: 1px solid #fff; /* Bela neon ivica */
