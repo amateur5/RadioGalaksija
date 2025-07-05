@@ -240,7 +240,7 @@ body {
   align-items: center; /* vertikalno centriranje */
   justify-content: flex-start; /* poravnanje levo */
   background-color: black;
-  width: 1550px;
+  width: 1250px;
   height: 200px;
   position: absolute;
   bottom: 0;
@@ -258,9 +258,9 @@ body {
       color: #fff;
       background-color: black;
       border: 1px solid #444;
-      padding: 15px 25px;
+      padding: 1px 1px;
       margin: 5px;
-      font-size: 24px;
+      font-size: 20px;
     }
 
     .command-table button {
