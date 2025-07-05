@@ -6,6 +6,7 @@ module.exports = (io) => {
   const stanje = {}; //  BORDERI ELEMENATA 
   let allUserAnimations = {}; 
 let fullLayoutData = null;   // BEZ MASKE 
+ const sirinaStanje = {};
  
    // **Šema i model za banovane IP adrese**
     const baniraniSchema = new mongoose.Schema({
@@ -143,6 +144,15 @@ socket.on("promeniGradijent", (data) => {
   socket.on('full-layout-reset', () => {
     fullLayoutData = null;
     socket.broadcast.emit('full-layout-reset');
+  });
+
+     socket.emit("pocetnoStanjeSirina", sirinaStanje);
+
+  // Kada korisnik menja širinu
+  socket.on("promeniSirinu", (data) => {
+   sirinaStanje[data.id] = data.borderWidth;
+
+socket.broadcast.emit("promeniSirinu", data);
   });
     
       socket.on('disconnect', () => {});
