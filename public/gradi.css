@@ -20,7 +20,7 @@
 #gradijent .gradijent-box {
   width: 100%; /* Prilagođeno na 100% da ispuni prostor */
   height: 100%; /* Prilagođeno na 100% da ispuni prostor */
-  border-radius: 6px;
+  z-index: 9999;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
