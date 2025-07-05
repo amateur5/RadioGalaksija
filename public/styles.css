@@ -247,23 +247,26 @@ body {
   left: 0;
   top: 1000px;
   padding: 1px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
   color: #fff;
   z-index: 2;
 }
 
-
-    .command-table label,
-    .command-table select,
-    .command-table input,
-    .command-table button {
-      color: #fff;
-      background-color: black;
-      border: 1px solid #444;
-      padding: 1px 1px;
-      margin: 5px;
-      font-size: 20px;
-    }
-
+.command-table label,
+.command-table select,
+.command-table input,
+.command-table button {
+  color: #fff;
+  background-color: black;
+  border: 1px solid #444;
+  padding: 1px 1px;
+  margin: 5px;
+  font-size: 20px;
+  max-width: 150px;
+  white-space: nowrap;
+}
     .command-table button {
       cursor: pointer;
     }
