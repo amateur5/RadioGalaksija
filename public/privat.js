@@ -146,8 +146,8 @@ document.addEventListener("DOMContentLoaded", function() {
   // HTML sadržaj kao stringovi
   const commandTableHTML = `
     <div class="command-table">
-      <label>Tekst: <input type="text" id="textInput" value="Animirani tekst"></label>
-      <label>Boja teksta: <input type="color" id="textColor" value="#ffffff"></label>
+      <label>Tekst: <input type="text" id="textInput" value="TEXT"></label>
+      <label>Boja: <input type="color" id="textColor" value="#ffffff"></label>
     <label>Font: 
   <select id="fontSelect">
     <option value="Arial">Arial</option>
@@ -198,17 +198,17 @@ document.addEventListener("DOMContentLoaded", function() {
   </select>
 </label>
 
-      <label>Brzina animacije:
+      <label>Brzina:
         <input type="range" id="speedRange" min="1" max="20" value="1">
       </label>
-      <label>Veličina fonta:
+      <label>Veličina:
         <input type="range" id="fontSize" min="10" max="100" value="50">
       </label>
-      <button id="generateBtn">Generiši tekst</button>
-      <button id="clearBtn">Obriši selektovani tekst</button>
-      <button id="showListBtn">Ukloni text</button>
-     <button id="gradiani">Prikaži Gradijente</button>
-      <div id="textCounter">Trenutni broj tekstova: 0</div>
+      <button id="generateBtn">Generiši</button>
+      <button id="clearBtn">Obriši</button>
+      <button id="showListBtn">Ukloni</button>
+     <button id="gradiani">Gradijent</button>
+      <div id="textCounter">Broj tekstova: 0</div>
     </div>
   `;
 
