@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function() {
       </label>
       <button id="generateBtn">Generiši tekst</button>
       <button id="clearBtn">Obriši selektovani tekst</button>
-      <button id="showListBtn">Kreiraj listu</button>
+      <button id="showListBtn">Ukloni text</button>
      <button id="gradiani">Prikaži Gradijente</button>
       <div id="textCounter">Trenutni broj tekstova: 0</div>
     </div>
@@ -216,31 +216,31 @@ document.addEventListener("DOMContentLoaded", function() {
     <div id="textContainer"></div>
   `;
 
-  const popupOverlayHTML = `
-    <div id="popupOverlay" class="popup-overlay"></div>
-  `;
+const popupOverlayHTML = `
+  <div id="poptxtOverlay" class="popup-overlay"></div>
+`;
 
-  const popupHTML = `
-    <div id="popup" class="popup">
-      <h2>Lista Tekstova</h2>
-      <ul id="textList" class="text-list"></ul>
-      <button id="closePopupBtn">Zatvori</button>
-    </div>
-  `;
+const popupHTML = `
+  <div id="poptxt" class="popup">
+    <h2>Lista Tekstova</h2>
+    <ul id="textList" class="text-list"></ul>
+    <button id="closePoptxtBtn">Zatvori</button>
+  </div>
+`;
 
-  // Dodavanje HTML sadržaja u body
-  const body = document.body;
-  body.insertAdjacentHTML('beforeend', commandTableHTML);
-  body.insertAdjacentHTML('beforeend', textContainerHTML);
-  body.insertAdjacentHTML('beforeend', popupOverlayHTML);
-  body.insertAdjacentHTML('beforeend', popupHTML);
+// Dodavanje HTML sadržaja u body
+const body = document.body;
+body.insertAdjacentHTML('beforeend', commandTableHTML);
+body.insertAdjacentHTML('beforeend', textContainerHTML);
+body.insertAdjacentHTML('beforeend', popupOverlayHTML);
+body.insertAdjacentHTML('beforeend', popupHTML);
 
-  // Pronaći dugme za otvaranje/zatvaranje command table
-  const anitextButton = document.getElementById("anitext");
-  const commandTable = document.querySelector(".command-table");
+// Pronaći dugme za otvaranje/zatvaranje command table
+const anitextButton = document.getElementById("anitext");
+const commandTable = document.querySelector(".command-table");
 
-  // Početno stanje: command table je skriven
-  commandTable.style.display = "none"; 
+// Početno stanje: command table je skriven
+commandTable.style.display = "none";
 
   // Funkcija za otvaranje/zatvaranje command table
   anitextButton.addEventListener("click", function() {
@@ -265,10 +265,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const textCounter = document.getElementById("textCounter");
   const textList = document.getElementById("textList");
   const showListBtn = document.getElementById("showListBtn");
-  const popup = document.getElementById("popup");
-  const popupOverlay = document.getElementById("popupOverlay");
-  const closePopupBtn = document.getElementById("closePopupBtn");
- const gradiani = document.getElementById('gradiani');
+ const popup = document.getElementById("poptxt");
+const popupOverlay = document.getElementById("poptxtOverlay");
+const closePopupBtn = document.getElementById("closePoptxtBtn");
+const gradiani = document.getElementById('gradiani');
 
     let isAuthenticated = false;
   let textElements = []; // Svi tekstovi će biti pohranjeni u ovom nizu
@@ -423,23 +423,23 @@ if (!authorizedUsers.has(currentUser)) {
     }
   });
 
-  // Prikazivanje popup-a sa listom
-  showListBtn.addEventListener("click", function () {
-    popup.style.display = "block";
-    popupOverlay.style.display = "block";
-  });
+ // Prikazivanje popup-a sa listom
+showListBtn.addEventListener("click", function () {
+  poptxt.style.display = "block";
+  poptxtOverlay.style.display = "block";
+});
 
-  // Zatvaranje popup-a
-  closePopupBtn.addEventListener("click", function () {
-    popup.style.display = "none";
-    popupOverlay.style.display = "none";
-  });
+// Zatvaranje popup-a
+closePoptxtBtn.addEventListener("click", function () {
+  poptxt.style.display = "none";
+  poptxtOverlay.style.display = "none";
+});
 
-  // Zatvori popup ako klikneš van njega
-  popupOverlay.addEventListener("click", function () {
-    popup.style.display = "none";
-    popupOverlay.style.display = "none";
-  });
+// Zatvori popup ako klikneš van njega
+poptxtOverlay.addEventListener("click", function () {
+  poptxt.style.display = "none";
+  poptxtOverlay.style.display = "none";
+});
 
   // Prijem trenutnog stanja od servera
 socket.on('currentState', function (data) {
