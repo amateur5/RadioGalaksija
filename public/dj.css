@@ -34,17 +34,16 @@ background: linear-gradient(45deg, #ff6347, #ffffff, #ff1493, #40e0d0); /* Crven
     height: 600px;
     overflow: hidden;
     background-color: black; /* Potpuno crna pozadina */
-    border: 15px solid #fff; /* Bela neon ivica */
-    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8); /* Neon svetlo oko */
-    border-radius: 15px; /* Veći zaobljeni kutovi */
-    padding: 20px;
+    border: 1px solid #fff; /* Bela neon ivica */
+    box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8); /* Neon svetlo oko */
+     padding: 5px;
     box-sizing: border-box;
 }
 
 .modal-content {
     background-color: black;
     color: #fff; /* Bela boja teksta */
-    padding: 20px;
+    padding: 5px;
     border: 1px solid #fff; /* Bela neon ivica */
     border-radius: 10px;
     font-family: 'Arial', sans-serif;
