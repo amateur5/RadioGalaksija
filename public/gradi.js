@@ -6,9 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.appendChild(gradijentTabla);
 
  const elementi = [
-  "chatContainer", "toolbar", "chatInput", "guestList", "openModal", "smilesBtn", "GBtn", "tube", "sound",
+  "chatContainer", "toolbar", "chatInput", "guestList", "openModal", "smilesBtn", "GBtn", "sound",
 ];
-const paket = ["openModal", "smilesBtn", "GBtn", "tube", "sound"];
+const paket = ["openModal", "smilesBtn", "GBtn","sound"];
 
   const neonBoje = [
     "red", "yellow", "lime", "white", "blue", "gray", "pink", "purple",
