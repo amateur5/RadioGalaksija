@@ -241,11 +241,12 @@ body {
   justify-content: flex-start; /* poravnanje levo */
   background-color: black;
   width: 1250px;
-  height: 200px;
+  height: 120px;
   position: absolute;
   bottom: 0;
+  left: 0;
   top: 1000px;
-  padding: 25px;
+  padding: 1px;
   color: #fff;
   z-index: 2;
 }
