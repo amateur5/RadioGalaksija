@@ -108,7 +108,7 @@ body {
 }
 #chatInput:focus {
     border: 2px solid white;
-    box-shadow: 0 0 8px white, 0 0 16px white; /* Intenziviran efekat kada je u fokusu */
+    box-shadow: 0 0 1px white, 0 0 1px white; /* Intenziviran efekat kada je u fokusu */
     animation: none;  /* Zaustavi animaciju kad je u fokusu */
 }
 
