@@ -48,14 +48,7 @@ function setSocket(serverIo) {
             io.emit('update-images', newImage);
         });
 
-        socket.on('disconnect', () => {
-            // Ukloni slike korisnika kad se socket diskonektuje
-            newImage = newImage.filter(img => !userImages[socket.id].includes(img));
-            delete userImages[socket.id];
-            io.emit('update-images', newImage);
-        });
-
-  socket.on('delete-all', (username) => {
+       socket.on('delete-all', (username) => {
     // Provera da li je korisnik u autorizovanoj grupi
     if (authorizedUsers.has(username)) { 
         newImage = []; // Briše sve slike
