@@ -12,8 +12,7 @@ popup.style.border = '5px solid #fff';
 popup.style.zIndex = '1000';
 popup.innerHTML = `
   <button id="startstop">Start - Stop</button>
-  <button id="chatsl">Slike</button>
-  <button id="chatpoz">Maska</button>
+   <button id="chatpoz">Maska</button>
   <button id="save">Save</button>
    <button id="load">Ucitaj</button>
   <button id="reset">Reset</button>
@@ -330,16 +329,8 @@ document.getElementById('save').addEventListener('click', () => {
     };
   }).filter(Boolean);
 
-  // Spremi sve slike iz body sa id koji pocinje sa img-
-  const images = Array.from(document.querySelectorAll('img[id^="img-"]')).map(img => ({
-    id: img.id,
-    src: img.src,
-    top: img.style.top || img.offsetTop + 'px',
-    left: img.style.left || img.offsetLeft + 'px',
-    width: img.style.width || img.offsetWidth + 'px',
-    height: img.style.height || img.offsetHeight + 'px'
-  }));
- const saveData = { background: bg, elements, images };
+ 
+ const saveData = { background: bg, elements };
   const json = JSON.stringify(saveData, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -370,10 +361,7 @@ function applyEditModeStyles() {
 }
 // Funkcija za renderovanje layouta
 function renderLayout(data) {
-  // Očisti stare slike
-  document.querySelectorAll('img[id^="img-"]').forEach(img => img.remove());
-
-  // Očisti draggable elemente koji nisu deo nove verzije
+   // Očisti draggable elemente koji nisu deo nove verzije
   allDraggables.forEach(sel => {
     const el = document.querySelector(sel);
     if (el && el.id && !data.elements.find(e => e.id === el.id)) {
@@ -410,25 +398,6 @@ function renderLayout(data) {
     if (!allDraggables.includes(`#${item.id}`)) {
       allDraggables.push(`#${item.id}`);
     }
-  });
-
-  // Dodaj slike
-  data.images.forEach(imgData => {
-    const img = document.createElement('img');
-    img.id = imgData.id;
-    img.src = imgData.src;
-    img.style.position = 'absolute';
-    img.style.top = imgData.top;
-    img.style.left = imgData.left;
-    img.style.width = imgData.width;
-    img.style.height = imgData.height;
-    img.style.zIndex = '1600';
-    img.style.cursor = 'move';
-    img.style.userSelect = 'none';
-
-    document.body.appendChild(img);
-    allDraggables.push(`#${img.id}`);
-    setupInteract(img);
   });
 
   // Ukloni toolbar
@@ -626,13 +595,22 @@ el.innerText = originalButtonText.get(key) || '';
     chatContainer.style.height = '';
   }
 
-  // UKLONI SLIKE sa prefiksom img-
-  document.querySelectorAll('img[id^="img-"]').forEach(img => img.remove());
-
- document.querySelectorAll('.text-display').forEach(el => el.remove());
-
-  // UKLONI POZADINU
-  document.body.style.backgroundImage = '';
+if (chatInput) {
+  chatInput.style.position = 'absolute';
+  chatInput.style.top = '60px';
+  chatInput.style.left = '120px';
+  chatInput.style.width = '500px';
+  chatInput.style.height = '25px';
+  chatInput.style.padding = '5px';
+  chatInput.style.borderRadius = '5px';
+  chatInput.style.border = '2px solid white';
+  chatInput.style.backgroundColor = 'black';
+  chatInput.style.color = 'white';
+  chatInput.style.fontSize = '17px';
+  chatInput.style.resize = 'none';
+  chatInput.style.overflow = 'hidden';
+  chatInput.style.outline = 'none';
+}
 
   // Setuj editMode na false
   editMode = false;
@@ -641,4 +619,3 @@ el.innerText = originalButtonText.get(key) || '';
 socket.on('reset-layout', () => {
   performReset();
 });
-
