@@ -12,6 +12,7 @@ popup.style.border = '5px solid #fff';
 popup.style.zIndex = '1000';
 popup.innerHTML = `
   <button id="startstop">Start - Stop</button>
+    <button id="chatsl">Slike</button>
    <button id="chatpoz">Maska</button>
   <button id="save">Save</button>
    <button id="load">Ucitaj</button>
