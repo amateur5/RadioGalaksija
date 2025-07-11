@@ -5,6 +5,7 @@ const { connectDB } = require('./mongo');
 const { register, login } = require('./prijava');
 const { setupSocketEvents } = require('./banmodul'); // Uvoz funkcije iz banmodula
 const konobaricaModul = require('./konobaricamodul'); // Uvoz konobaricamodul.js
+const slikemodul = require('./slikemodul');
 const pingService = require('./ping');
 const privatmodul = require('./privatmodul'); // Podesi putanju ako je u drugom folderu
 require('dotenv').config();
@@ -24,6 +25,7 @@ const io = socketIo(server, {
 
 connectDB(); // Povezivanje na bazu podataka
 konobaricaModul(io);
+slikemodul.setSocket(io);
 
 // Middleware za parsiranje JSON podataka i serviranje statičkih fajlova
 app.use(express.json());
