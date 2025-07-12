@@ -7,7 +7,6 @@ module.exports = (io) => {
   let allUserAnimations = {}; 
 let fullLayoutData = null;   // BEZ MASKE 
   let layoutData = null;
-let layoutReset = false;
  const sirinaStanje = {};
  
    // **Šema i model za banovane IP adrese**
@@ -157,21 +156,18 @@ socket.on("promeniGradijent", (data) => {
 socket.broadcast.emit("promeniSirinu", data);
   });
 
-     socket.on('chat-layout-update', data => {
-    layoutData = data; // sačuvaj layout na serveru
-    socket.broadcast.emit('chat-layout-update', layoutData); // pošalji svima osim pošiljaocu
+    socket.emit('render-layout', layoutData);
+
+  socket.on('reset-layout', () => {
+    layoutData.background = {}; // resetuj
+    layoutData.elements = [];   // ako treba resetuj i elemente
+    io.emit('render-layout', layoutData); // pošalji svima novo stanje
   });
 
-  // Pošalji trenutni layout novom korisniku
-if (layoutData) {
-  socket.emit('chat-layout-update', layoutData);
-} else {
-  socket.emit('reset-layout');
-}
- socket.on('reset-layout', () => {
-    io.emit('reset-layout'); // pošalji svim klijentima reset event
+  socket.on('update-layout', (newData) => {
+    layoutData = newData; // ili samo deo, kako želiš
+    io.emit('render-layout', layoutData);
   });
-
     
       socket.on('disconnect', () => {});
     });
