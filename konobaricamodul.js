@@ -6,7 +6,6 @@ module.exports = (io) => {
   const stanje = {}; //  BORDERI ELEMENATA 
   let allUserAnimations = {}; 
 let fullLayoutData = null;   // BEZ MASKE 
-  let layoutData = null;
  const sirinaStanje = {};
  
    // **Šema i model za banovane IP adrese**
@@ -156,19 +155,6 @@ socket.on("promeniGradijent", (data) => {
 socket.broadcast.emit("promeniSirinu", data);
   });
 
-    socket.emit('render-layout', layoutData);
-
-  socket.on('reset-layout', () => {
-    layoutData.background = {}; // resetuj
-    layoutData.elements = [];   // ako treba resetuj i elemente
-    io.emit('render-layout', layoutData); // pošalji svima novo stanje
-  });
-
-  socket.on('update-layout', (newData) => {
-    layoutData = newData; // ili samo deo, kako želiš
-    io.emit('render-layout', layoutData);
-  });
-    
-      socket.on('disconnect', () => {});
+        socket.on('disconnect', () => {});
     });
 };
