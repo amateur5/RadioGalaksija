@@ -145,8 +145,8 @@ function startEditMode() {
   const toolbar = document.getElementById('toolbar');
   if (toolbar) {
     while (toolbar.firstChild) {
-      toolbar.parentNode.insertBefore(toolbar.firstChild, toolbar);
-    }
+     toolbar.parentNode.insertBefore(toolbar.firstChild, toolbar.nextSibling);
+  }
     toolbar.remove();
   }
 
