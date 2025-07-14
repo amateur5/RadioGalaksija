@@ -69,12 +69,12 @@ function setupInteract(el) {
   el.style.position = 'absolute';
   el.style.touchAction = 'none';
 
-  // Ceo element za drag
+  // Precizan DRAG
   interact(el).draggable({
-    allowFrom: el, // dozvoljava drag sa bilo kog dela elementa
+    allowFrom: el,
     modifiers: [
       interact.modifiers.snap({
-        targets: [interact.snappers.grid({ x: 10, y: 10 })],
+        targets: [interact.snappers.grid({ x: 1, y: 1 })],
         range: Infinity,
         relativePoints: [{ x: 0, y: 0 }]
       }),
@@ -88,17 +88,17 @@ function setupInteract(el) {
         target.style.transform = `translate(${x}px, ${y}px)`;
         target.setAttribute('data-x', x);
         target.setAttribute('data-y', y);
-        target.style.cursor = 'move'; // osigurava move kursor
+        target.style.cursor = 'move';
       }
     }
   });
 
-  // Resize samo na ivicama
+  // Precizan RESIZE
   interact(el).resizable({
     edges: { top: true, left: true, bottom: true, right: true },
     modifiers: [
       interact.modifiers.snapSize({
-        targets: [interact.snappers.grid({ x: 10, y: 10 })]
+        targets: [interact.snappers.grid({ x: 1, y: 1 })]
       })
     ],
     listeners: {
@@ -116,8 +116,6 @@ function setupInteract(el) {
     }
   });
 }
-
-
 document.getElementById('chatpoz').addEventListener('click', () => {
   let imageSource = prompt("Unesi URL slike:");
   if (!imageSource) {
