@@ -8,6 +8,7 @@ window.onload = function () {
 
     tabela.style.cssText = `
         position: fixed;
+         z-index: 9999;
         bottom: 0;
         left: 0;
         width: 300px;
