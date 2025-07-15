@@ -1,55 +1,38 @@
-let selectedImage = null; // Deklaracija promenljive koja drži trenutno selektovanu sliku
-
 document.getElementById('addImage').addEventListener('click', function () {
-    const imageSource = prompt("Unesite URL slike (JPG, PNG, GIF):");
+    const imageSource = prompt("Unesite URL slike:");
 
-    if (imageSource) { // Ako je URL slike unet
-        const position = { x: 100, y: 300 }; // Primer pozicije
-        const dimensions = { width: 200, height: 200 }; // Primer dimenzija
+    if (imageSource) {
+        const position = { x: 100, y: 300 };
+        const dimensions = { width: 200, height: 200 };
 
-        // Provera formata slike
-        const fileExtension = imageSource.split('.').pop().toLowerCase(); // Uzima ekstenziju fajla
-        const validFormats = ['jpg', 'png', 'gif'];
-
-        if (validFormats.includes(fileExtension)) {
-            // Emitujemo URL slike sa pozicijom i dimenzijama serveru pod imenom 'add-image'
-            socket.emit('add-image', imageSource, position, dimensions);
-        } else {
-            alert('Format slike nije podržan. Podržani formati su: JPG, PNG, GIF.');
-        }
+        socket.emit('add-image', imageSource, position, dimensions);
     } else {
         alert('URL slike nije unet.');
     }
 });
 
-// Osluškujemo 'display-image' događaj sa servera
 socket.on('display-image', (data) => {
     addImageToDOM(data.imageUrl, data.position, data.dimensions);
 });
 
-// Osluškujemo 'initial-images' događaj sa servera i prikazujemo postojeće slike
 socket.on('initial-images', (images) => {
     images.forEach((imageData) => {
         addImageToDOM(imageData.imageUrl, imageData.position, imageData.dimensions);
     });
 });
 
-// Osluškujemo 'update-images' događaj sa servera
 socket.on('update-images', (updatedImages) => {
-     document.querySelectorAll('img').forEach(slika => {
-    if (slika.id !== "playerCover") {
-        slika.remove(); // Briše samo slike koje nemaju ID "playerCover"
-    }
-});
+    document.querySelectorAll('img').forEach(slika => {
+        if (slika.id !== "playerCover") {
+            slika.remove();
+        }
+    });
 
-    // Zatim ponovo dodajemo sve slike iz nove liste
     updatedImages.forEach((imageData) => {
         addImageToDOM(imageData.imageUrl, imageData.position, imageData.dimensions);
     });
 });
 
-
-// Funkcija za dodavanje slike na DOM
 function addImageToDOM(imageUrl, position, dimensions) {
     let existingImage = document.querySelector(`img[src="${imageUrl}"]`);
     if (!existingImage) {
@@ -62,63 +45,27 @@ function addImageToDOM(imageUrl, position, dimensions) {
         newImage.style.top = position.y + 'px';
         newImage.style.zIndex = "1000";
         newImage.classList.add('draggable', 'resizable');
-        newImage.style.border = "none";
 
-        // Selektovanje slike
-        function selectImage(image) {
-            if (selectedImage && selectedImage !== image) {
-                selectedImage.style.border = "none"; // Ukloni indikator sa prethodne selekcije
-            }
-            selectedImage = image;
-            selectedImage.style.border = "2px solid red"; // Dodaj indikator selekcije
-        }
+        const authorizedUsers = new Set(['Radio Galaksija', 'ZI ZU', '*__X__*']); 
 
-        // Desni klik za selekciju slike
         newImage.addEventListener('contextmenu', function (event) {
             event.preventDefault();
-            selectImage(newImage);
-        });
-
-        // Održavanje selekcije (indikator ostaje bez obzira na interakciju miša)
-        document.addEventListener('click', function (event) {
-            if (!event.target.classList.contains('draggable') && selectedImage) {
-                selectedImage.style.border = "2px solid red"; // Održavaj okvir
+            if (authorizedUsers.has(currentUser)) {
+                if (confirm("Da li želiš da obrišeš ovu sliku?")) {
+                    newImage.remove();
+                    socket.emit('remove-image', newImage.src);
+                }
             }
         });
 
-        // Dugme za brisanje slike
-        const deleteButton = document.createElement('button');
-        deleteButton.innerText = "Ukloni Sliku";
-        deleteButton.style.position = "fixed";
-        deleteButton.style.bottom = "10px";
-        deleteButton.style.right = "10px";
-        deleteButton.style.zIndex = "1001";
+        if (authorizedUsers.has(currentUser)) {
+            enableDragAndResize(newImage);
+        }
 
-       deleteButton.addEventListener('click', function () {
-    if (selectedImage) {
-        const imageUrl = selectedImage.src;
-        selectedImage.remove(); // Ukloni selektovanu sliku sa DOM-a
-        socket.emit('remove-image', imageUrl); // Emituj događaj za server sa URL-om slike
-        selectedImage = null; // Očisti selekciju
-    } else {
-        alert("Nijedna slika nije selektovana!");
+        document.body.appendChild(newImage);
     }
-});
-// Definiši privilegovane korisnike
-const authorizedUsers = new Set(['Radio Galaksija', 'ZI ZU', '*__X__*']); 
-
-// Omogućavanje interakcije samo za privilegovane korisnike
-if (authorizedUsers.has(currentUser)) {
-    newImage.style.pointerEvents = "auto"; // Omogućava klikove i interakciju
-    enableDragAndResize(newImage); // Uključi funkcionalnost za povlačenje i promenu veličine
-} else {
-    newImage.style.pointerEvents = "none"; // Onemogućava klikove
 }
 
-document.body.appendChild(deleteButton);
-document.body.appendChild(newImage);
-}
-}
 // Funkcija za omogućavanje drag-and-resize funkcionalnosti za sliku
 function enableDragAndResize(img) {
     let isResizing = false;
@@ -127,17 +74,7 @@ function enableDragAndResize(img) {
     // Onemogućava promenu kursora prilikom pomeranja slike
     img.style.cursor = 'default';
 
-    // Dodavanje border-a kada korisnik pređe mišem preko slike
-    img.addEventListener('mouseenter', function () {
-        img.style.border = "2px dashed red";
-    });
-
-    // Uklanjanje border-a kada korisnik skloni miša sa slike
-    img.addEventListener('mouseleave', function () {
-        img.style.border = "none";
-    });
-
-    img.addEventListener('mousedown', function (e) {
+     img.addEventListener('mousedown', function (e) {
         const rect = img.getBoundingClientRect();
         const borderSize = 10;
 
