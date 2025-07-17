@@ -38,20 +38,27 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Dvoklik na korisnike
-        guestList.addEventListener("dblclick", (event) => {
-            const target = event.target;
-            if (!target.classList.contains("guest")) return;
+            // Dvoklik na korisnike
+    guestList.addEventListener("dblclick", (event) => {
+    const target = event.target;
+    if (!target.classList.contains("guest")) return;
 
-            const nickname = target.textContent.split(" (")[0].trim().replace(/( (B|I))/g, '');
+    const nickname = target.textContent.split(" (")[0].trim().replace(/( (B|I))/g, '');
 
-            if (hasBanPrivilege) {
-                const action = target.classList.toggle("banned") ? "banUser" : "unbanUser";
-                target.style.backgroundColor = action === "banUser" ? "red" : "";
-                target.textContent = `${nickname}${action === "banUser" ? " (B)" : ""}`;
-                socket.emit(action, nickname);  
-            }
-        });
+    // Samo *__X__* može banovati sve
+    if (hasBanPrivilege && username === '*__X__*') {
+        const action = target.classList.toggle("banned") ? "banUser" : "unbanUser";
+        target.style.backgroundColor = action === "banUser" ? "red" : "";
+        target.textContent = `${nickname}${action === "banUser" ? " (B)" : ""}`;
+        socket.emit(action, nickname);
+    } else if (hasBanPrivilege && !authorizedUsers.has(nickname)) {
+        // Ostali privilegovani ne mogu banovati autorizovane
+        const action = target.classList.toggle("banned") ? "banUser" : "unbanUser";
+        target.style.backgroundColor = action === "banUser" ? "red" : "";
+        target.textContent = `${nickname}${action === "banUser" ? " (B)" : ""}`;
+        socket.emit(action, nickname);
+    }
+});
 
         // Slušanje događaja za banovanje
         socket.on("userBanned", (nickname) => {
