@@ -6,7 +6,7 @@ socket.on('yourNickname', function(nick) {
 
 let isBold = false;
 let isItalic = false;
-let currentColor = '';
+let currentColor = 'rgba(200, 200, 200, 0.5)';
 let isUnderline = false;
 let isOverline = false;
 const guestsData = {};
