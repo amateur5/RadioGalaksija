@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const waveformDiv = document.getElementById('waveform');
+  console.log('DIV waveform pronadjen:', waveformDiv);
 
-  // Stilovi diva
   Object.assign(waveformDiv.style, {
     width: '400px',
     height: '100px',
@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     top: '200px'
   });
 
-  // Drag funkcija
   waveformDiv.onmousedown = function (event) {
     let shiftX = event.clientX - waveformDiv.getBoundingClientRect().left;
     let shiftY = event.clientY - waveformDiv.getBoundingClientRect().top;
@@ -41,13 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   waveformDiv.ondragstart = () => false;
 
-  // Kreiramo unutrašnji container za Wavesurfer
   const innerWaveform = document.createElement('div');
   innerWaveform.style.width = '100%';
   innerWaveform.style.height = '100%';
   waveformDiv.appendChild(innerWaveform);
 
-  // Wavesurfer setup
+  console.log('Kreiram wavesurfer...');
   const wavesurfer = WaveSurfer.create({
     container: innerWaveform,
     waveColor: 'yellow',
@@ -58,15 +56,26 @@ document.addEventListener('DOMContentLoaded', () => {
     interact: false
   });
 
+  console.log('Ucitam stream...');
   wavesurfer.load('https://stream.zeno.fm/krdfduyswxhtv');
 
-  // Promena boje po jačini zvuka (na osnovu analize frekvencija)
+  wavesurfer.on('ready', () => {
+    console.log('Stream je spreman, pocinjem reprodukciju...');
+    wavesurfer.play();
+  });
+
+  wavesurfer.on('error', (e) => {
+    console.error('Wavesurfer greska:', e);
+  });
+
   wavesurfer.on('audioprocess', () => {
     const analyser = wavesurfer.backend.getAnalyserNode();
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(dataArray);
 
     let avg = dataArray.reduce((a, b) => a + b) / dataArray.length;
+
+    console.log('Prosecan nivo zvuka:', avg);
 
     if (avg < 30) {
       wavesurfer.setWaveColor('yellow');
