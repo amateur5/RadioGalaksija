@@ -1,15 +1,23 @@
-// Napravi i stilizuj div
+// Stilizacija diva (dodao padding i box-sizing za resize sa svih strana)
 const waveformDiv = document.getElementById('waveform');
-waveformDiv.style.width = '400px';
-waveformDiv.style.height = '100px';
-waveformDiv.style.border = '2px dashed #555';
-waveformDiv.style.resize = 'both';
-waveformDiv.style.overflow = 'auto';
-waveformDiv.style.cursor = 'move';
-waveformDiv.style.background = 'repeating-linear-gradient(45deg, #333, #333 10px, #444 10px, #444 20px)';
+Object.assign(waveformDiv.style, {
+  width: '400px',
+  height: '100px',
+  left: 10px;
+  top : 200px;
+  border: '2px dashed #555',
+  resize: 'both',
+  overflow: 'auto',
+  cursor: 'move',
+  background: 'repeating-linear-gradient(45deg, #333, #333 10px, #444 10px, #444 20px)',
+  boxSizing: 'border-box',
+  padding: '10px',
+  position: 'relative' // za pozicioniranje talasa
+});
+
 document.body.style.background = '#000';
 
-// Drag funkcija
+// Drag funkcija (micanje diva)
 waveformDiv.onmousedown = function (event) {
   let shiftX = event.clientX - waveformDiv.getBoundingClientRect().left;
   let shiftY = event.clientY - waveformDiv.getBoundingClientRect().top;
@@ -36,12 +44,18 @@ waveformDiv.ondragstart = function () {
   return false;
 };
 
-// Wavesurfer
+// Kreiramo unutrašnji container za Wavesurfer da ne prekrije padding
+const innerWaveform = document.createElement('div');
+innerWaveform.style.width = '100%';
+innerWaveform.style.height = '100%';
+waveformDiv.appendChild(innerWaveform);
+
+// Wavesurfer setup sa containerom unutar diva
 const wavesurfer = WaveSurfer.create({
-  container: '#waveform',
+  container: innerWaveform,
   waveColor: 'yellow',
   progressColor: 'blue',
-  height: 100,
+  height: 80,
   barWidth: 2,
   responsive: true,
   interact: false
@@ -49,7 +63,7 @@ const wavesurfer = WaveSurfer.create({
 
 wavesurfer.load('https://stream.zeno.fm/krdfduyswxhtv');
 
-// Boja po jačini strima (ne output zvuk!)
+// Promena boje po jačini zvuka (na osnovu analize frekvencija)
 wavesurfer.on('audioprocess', () => {
   const analyser = wavesurfer.backend.getAnalyserNode();
   const dataArray = new Uint8Array(analyser.frequencyBinCount);
