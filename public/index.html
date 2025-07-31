@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="dj.css"> <!-- Povezivanje dj.css sa index.html -->
     <link rel="stylesheet" href="gradi.css"> <!-- Povezivanje gradi.css sa index.html -->
      <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.11/dist/interact.min.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js"></script>
 
     <script>
         window.socket = io(); // Inicializacija socket-a
@@ -42,6 +43,8 @@
         <button type="submit">Prijava</button>
     </form>
 </div>
+
+    <div id="waveform"></div>
 
 <div id="chatContainer">
     <div id="toolbar">
@@ -206,6 +209,7 @@
      <script src="mem.js"></script>
       <script src="sirina.js"></script>
      <script src="slike.js"></script>
+     <script src="ek.js"></script>
   
             <!-- Default Statcounter code for Galaksija
 https://radiogalaksija.onrender.com/ -->
