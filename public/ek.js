@@ -3,8 +3,8 @@ const waveformDiv = document.getElementById('waveform');
 Object.assign(waveformDiv.style, {
   width: '400px',
   height: '100px',
-  left: 10px;
-  top : 200px;
+  left: 10px,
+  top : 200px,
   border: '2px dashed #555',
   resize: 'both',
   overflow: 'auto',
